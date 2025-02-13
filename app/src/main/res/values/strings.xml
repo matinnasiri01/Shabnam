@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ShabnamCompose</string>
+
+    <!-- Bottom Navigation -->
+    <string name="bn_dashboard">داشبورد</string>
+    <string name="bn_contacts">اشخاص</string>
+    <string name="bn_stockroom">کالا و انبار</string>
+    <string name="bn_accounts">حساب‌ها</string>
 </resources>

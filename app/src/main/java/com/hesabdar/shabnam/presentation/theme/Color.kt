@@ -1,4 +1,4 @@
-package com.hesabdar.shabnam.ui.theme
+package com.hesabdar.shabnam.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
