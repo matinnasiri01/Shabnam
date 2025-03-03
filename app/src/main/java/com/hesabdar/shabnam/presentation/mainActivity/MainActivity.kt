@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -14,8 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.hesabdar.shabnam.presentation.home.HomeScreen
+import com.hesabdar.shabnam.presentation.home.component.HomeTopApp
 import com.hesabdar.shabnam.presentation.navigation.Navigation
 import com.hesabdar.shabnam.presentation.splash.SplashScreen
 import com.hesabdar.shabnam.presentation.theme.ShabnamComposeTheme
@@ -30,32 +33,46 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ShabnamComposeTheme {
-                val navController = rememberNavController()
-                var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
-                Scaffold(bottomBar = { Navigation(selectedItemIndex) { selectedItemIndex = it } }) {
-                    NavHost(
-                        modifier = Modifier.padding(it),
-                        navController = navController,
-                        startDestination = SplashScreen
-                    ) {
-                        composable<HomeScreen> { HomeScreen() }
-                        composable<SplashScreen> {
-                            SplashScreen {
-                                navController.navigate(
-                                    HomeScreen
-                                )
-                            }
-                        }
-                    }
-                }
+                App()
             }
         }
     }
 }
 
 
-// route
+@Composable
+fun App(modifier: Modifier = Modifier) {
 
+
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination?.route?.split(".")?.last()
+    var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+
+
+    Scaffold(topBar = {
+
+        if (currentDestination == "HomeScreen") HomeTopApp()
+    }, bottomBar = {
+        if (currentDestination in bottomNav) Navigation(selectedItemIndex) {
+            selectedItemIndex = it
+        }
+    }) {
+        NavHost(
+            modifier = modifier.padding(it),
+            navController = navController,
+            startDestination = SplashScreen
+        ) {
+            composable<HomeScreen> { HomeScreen() }
+            composable<SplashScreen> { SplashScreen { navController.navigate(HomeScreen) } }
+        }
+    }
+}
+
+val bottomNav = listOf(HomeScreen).map { it.toString() }
+
+
+// route
 @Serializable
 data object HomeScreen
 

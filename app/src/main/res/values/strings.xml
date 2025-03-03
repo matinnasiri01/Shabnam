@@ -8,5 +8,9 @@
     <string name="bn_accounts">حساب‌ها</string>
 
     <!-- Home -->
+    <string name="hs_create">ثبت سند</string>
+    <string name="hs_date">پنجشنبه 9 اسفند 1403</string>
+
+
     <string name="hs_free">رایگان</string>
 </resources>
