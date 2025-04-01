@@ -13,4 +13,12 @@
 
 
     <string name="hs_free">رایگان</string>
+    <string name="ps_side_of_accounts">طرف حساب ها</string>
+
+    <string-array name="ps_status">
+        <item>همه</item>
+        <item>بدهکاران</item>
+        <item>بستانکاران</item>
+    </string-array>
+
 </resources>

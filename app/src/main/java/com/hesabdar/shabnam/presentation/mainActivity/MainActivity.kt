@@ -17,9 +17,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hesabdar.shabnam.presentation.fab.Fab
 import com.hesabdar.shabnam.presentation.home.HomeScreen
 import com.hesabdar.shabnam.presentation.home.component.HomeTopApp
 import com.hesabdar.shabnam.presentation.navigation.Navigation
+import com.hesabdar.shabnam.presentation.persons.PersonsScreen
+import com.hesabdar.shabnam.presentation.persons.component.PersonsTopApp
 import com.hesabdar.shabnam.presentation.splash.SplashScreen
 import com.hesabdar.shabnam.presentation.theme.ShabnamComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,10 +56,13 @@ fun App(modifier: Modifier = Modifier) {
     Scaffold(topBar = {
 
         if (currentDestination == "HomeScreen") HomeTopApp()
+        if (currentDestination == "PersonsScreen") PersonsTopApp()
+
     }, bottomBar = {
-        if (currentDestination in bottomNav) Navigation(selectedItemIndex) {
-            selectedItemIndex = it
-        }
+        if (currentDestination in bottomNav) Navigation(selectedItemIndex = selectedItemIndex,
+            onClick = { selectedItemIndex = it })
+    }, floatingActionButton = {
+        if (currentDestination in bottomFab) Fab()
     }) {
         NavHost(
             modifier = modifier.padding(it),
@@ -64,13 +70,16 @@ fun App(modifier: Modifier = Modifier) {
             startDestination = SplashScreen
         ) {
             composable<HomeScreen> { HomeScreen() }
-            composable<SplashScreen> { SplashScreen { navController.navigate(HomeScreen) } }
+            composable<PersonsScreen> { PersonsScreen() }
+            composable<SplashScreen> { SplashScreen { navController.navigate(PersonsScreen) } }
+
         }
     }
 }
 
-val bottomNav = listOf(HomeScreen).map { it.toString() }
-
+fun <T> List<T>.toStr() = this.map { it.toString() }
+val bottomNav = listOf(HomeScreen, PersonsScreen).toStr()
+val bottomFab = listOf(PersonsScreen).toStr()
 
 // route
 @Serializable
@@ -78,3 +87,6 @@ data object HomeScreen
 
 @Serializable
 data object SplashScreen
+
+@Serializable
+data object PersonsScreen
